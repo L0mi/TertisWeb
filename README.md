@@ -30,6 +30,8 @@ Static-only hosting is enough for Single Player and VS AI, but multiplayer needs
 
 Every key can be changed under Options. The on-screen control legend updates immediately.
 
+On phones, the native-style D-pad places hard drop on the upper arrow, with left/right/down around it. Rotate and Hold remain grouped on the opposite side. Touch buttons can still be moved, resized, and made transparent in Options.
+
 ## Multiplayer
 
 - 2–4 players
