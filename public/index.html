@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#090e1b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tertis">
+  <title>Tertis 1.12</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+    <section id="screen-register" class="screen panel-screen">
+      <div class="card welcome-card">
+        <p class="eyebrow">WELCOME TO</p><h1>TERTIS</h1>
+        <p>Register a username to save your score and join multiplayer rooms.</p>
+        <label>USERNAME<input id="username-input" maxlength="16" autocomplete="nickname" placeholder="PLAYER"></label>
+        <button data-action="register" class="primary">CONTINUE</button>
+      </div>
+    </section>
+
+    <section id="screen-menu" class="screen panel-screen hidden">
+      <div class="menu-shell">
+        <p id="menu-user" class="eyebrow"></p><h1>TERTIS</h1><p class="subtitle">BLOCKS • BATTLES • CHAOS</p>
+        <button data-action="solo" class="primary wide">SINGLE PLAYER</button>
+        <button data-action="versus" class="purple wide">VS AI</button>
+        <button data-action="multiplayer" class="blue wide">LOCAL MULTIPLAYER</button>
+        <button data-action="settings" class="secondary wide">OPTIONS</button>
+        <p id="menu-deadlock" class="danger-text hidden">⚠ DEADLOCK MODE ACTIVE</p>
+        <p class="version">VERSION 1.12 • WEB</p>
+      </div>
+    </section>
+
+    <section id="screen-difficulty" class="screen panel-screen hidden">
+      <div class="card"><button class="back" data-action="menu">←</button><h2>VS AI</h2><p>Select difficulty</p>
+        <button data-difficulty="EASY" class="wide">EASY</button><button data-difficulty="NORMAL" class="blue wide">NORMAL</button>
+        <button id="hard-button" data-difficulty="HARD" class="purple wide">HARD</button>
+        <button id="chaos-button" data-difficulty="CHAOS" class="chaos wide hidden">⚠ CHAOS</button>
+        <p class="hint">Tap HARD repeatedly to reveal a hidden difficulty.</p>
+      </div>
+    </section>
+
+    <section id="screen-warning" class="screen panel-screen hidden">
+      <div class="card warning"><h2>⚠ CHAOS WARNING</h2>
+        <p>Chaos includes flashing theme changes, randomized falling speed, unreliable hold, freeze power-ups, and a 1% match-level instant defeat chance.</p>
+        <p><strong>Epilepsy warning:</strong> visual flashes may affect photosensitive players.</p>
+        <h3>ARE YOU SURE YOU WANT TO CONTINUE?</h3>
+        <button data-action="confirm-chaos" class="chaos wide">CONTINUE</button><button data-action="difficulty" class="secondary wide">CANCEL</button>
+      </div>
+    </section>
+
+    <section id="screen-multiplayer" class="screen panel-screen hidden">
+      <div class="card"><button class="back" data-action="menu">←</button><h2>LOCAL MULTIPLAYER</h2><p>2–4 players • Version 1.12 required</p>
+        <button data-action="host" class="blue wide">HOST ROOM</button><button data-action="join-view" class="purple wide">JOIN ROOM</button>
+        <div id="join-box" class="hidden"><label>ROOM CODE<input id="room-code" maxlength="5" autocomplete="off" placeholder="ABCDE"></label><button data-action="join" class="primary wide">REQUEST TO JOIN</button></div>
+        <p class="hint">Use the same Wi-Fi/hotspot, or deploy this server online for internet play.</p>
+      </div>
+    </section>
+
+    <section id="screen-lobby" class="screen panel-screen hidden">
+      <div class="card lobby-card"><button class="back" data-action="leave-room">←</button><p class="eyebrow">ROOM CODE</p><h1 id="lobby-code">-----</h1>
+        <p id="lobby-status">Waiting for players…</p><button data-action="share-room" class="secondary wide">SHARE ROOM</button><div id="player-list" class="player-list"></div>
+        <div id="host-options" class="hidden"><p class="eyebrow">MATCH RULES</p><div class="segmented"><button data-rules="NORMAL">NORMAL</button><button id="lobby-deadlock" data-rules="DEADLOCK">DEADLOCK</button><button id="lobby-chaos" data-rules="CHAOS" class="hidden">CHAOS</button></div><button data-action="start-room" class="primary wide">START MATCH</button></div>
+        <p class="hint">Host: hold DEADLOCK to reveal CHAOS.</p>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen panel-screen hidden">
+      <div class="settings-card"><button class="back" data-action="settings-back">←</button><h2>OPTIONS</h2>
+        <div class="settings-grid">
+          <button id="setting-dark" data-setting="dark">DARK MODE</button><button id="setting-ghost" data-setting="ghost">GHOST</button>
+          <button id="setting-deadlock" data-setting="deadlock" class="danger">DEADLOCK</button><button data-action="edit-controls">EDIT TOUCH CONTROLS</button>
+        </div>
+        <label>MASTER VOLUME <span id="master-value"></span><input id="master-volume" type="range" min="0" max="1" step="0.05"></label>
+        <label>MUSIC VOLUME <span id="music-value"></span><input id="music-volume" type="range" min="0" max="1" step="0.05"></label>
+        <h3>PC KEYBINDS</h3><div id="keybind-list" class="keybind-grid"></div><button data-action="reset-keybinds" class="secondary">RESET KEYBINDS</button>
+        <p class="disclaimer">For entertainment and toilet-seat gaming purposes only. Not for profit. Tetris and all related rights belong to The Tetris Company and their respective owners.</p>
+      </div>
+    </section>
+
+    <section id="screen-editor" class="screen hidden">
+      <div class="editor-bar"><strong>EDIT TOUCH CONTROLS</strong><span>Drag buttons • select one to resize</span><label>SIZE <input id="control-size" type="range" min="0.65" max="1.5" step="0.05"></label><label>OPACITY <input id="control-alpha" type="range" min="0.25" max="1" step="0.05"></label><button data-action="reset-touch">RESET</button><button data-action="editor-done" class="primary">DONE</button></div>
+    </section>
+
+    <section id="screen-game" class="screen game-screen hidden">
+      <header class="hud"><div><span id="hud-name">SCORE</span><strong id="hud-score">0</strong></div><div><span>TIME</span><strong id="hud-time">00:00</strong></div><button data-action="pause" class="pause-button">Ⅱ</button></header>
+      <div class="game-layout"><aside class="preview-column"><div class="preview"><span>HOLD</span><canvas id="hold-canvas" width="100" height="78"></canvas><b id="hold-status"></b></div><div class="preview"><span>NEXT</span><canvas id="next-canvas" width="100" height="78"></canvas></div></aside>
+        <canvas id="game-canvas" width="300" height="600" aria-label="Tertis board"></canvas>
+        <aside class="opponents"><div id="ai-preview" class="opponent hidden"><span id="ai-label">AI</span><canvas width="100" height="200"></canvas></div><div id="remote-previews"></div></aside>
+      </div>
+      <div id="notice" class="notice hidden"></div><button id="freeze-button" data-control="freeze" class="freeze hidden">❄ FREEZE AI</button>
+      <div id="keyboard-guide" class="keyboard-guide"></div>
+      <div id="touch-controls" class="touch-controls">
+        <button data-control="left">←</button><button data-control="right">→</button><button data-control="down">↓</button><button data-control="drop">↑<small>DROP</small></button><button data-control="rotate">↻</button><button data-control="hold">HOLD</button>
+      </div>
+      <div id="pause-overlay" class="overlay hidden"><div class="card"><h2>PAUSED</h2><button data-action="resume" class="primary wide">RESUME</button><button data-action="pause-settings" class="wide">OPTIONS</button><button data-action="quit" class="secondary wide">MAIN MENU</button></div></div>
+      <div id="gameover-overlay" class="overlay hidden"><div class="card"><h2 id="result-title">GAME OVER</h2><p id="result-summary"></p><button data-action="rematch" class="primary wide">PLAY AGAIN</button><button data-action="quit" class="secondary wide">MAIN MENU</button></div></div>
+    </section>
+  </main>
+  <div id="modal" class="modal hidden"><div class="card"><h3 id="modal-title"></h3><p id="modal-message"></p><div id="modal-actions"></div></div></div>
+  <script src="engine.js"></script><script src="app.js"></script>
+</body>
+</html>

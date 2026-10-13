@@ -1,0 +1,11 @@
+{
+  "name": "Tertis Web",
+  "short_name": "Tertis",
+  "version": "1.12",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090e1b",
+  "theme_color": "#090e1b",
+  "icons": [{"src":"assets/icon.png","sizes":"1024x1024","type":"image/png","purpose":"any maskable"}]
+}
