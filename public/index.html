@@ -10,7 +10,7 @@
   <title>Tertis 1.12</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/icon.png">
-  <link rel="stylesheet" href="styles.css?v=1.12.4">
+  <link rel="stylesheet" href="styles.css?v=1.12.10">
 </head>
 <body>
   <main id="app">
@@ -30,6 +30,7 @@
         <button data-action="versus" class="purple wide">VS AI</button>
         <button data-action="multiplayer" class="blue wide">LOCAL MULTIPLAYER</button>
         <button data-action="settings" class="secondary wide">OPTIONS</button>
+        <a class="button-link secondary wide" href="https://github.com/L0mi/Tertis.git" target="_blank" rel="noopener noreferrer">GET MOBILE STANDALONE APP</a>
         <p id="menu-deadlock" class="danger-text hidden">⚠ DEADLOCK MODE ACTIVE</p>
         <p class="version">VERSION 1.12 • WEB</p>
       </div>
@@ -64,6 +65,7 @@
     <section id="screen-lobby" class="screen panel-screen hidden">
       <div class="card lobby-card"><button class="back" data-action="leave-room">←</button><p class="eyebrow">ROOM CODE</p><h1 id="lobby-code">-----</h1>
         <p id="lobby-status">Waiting for players…</p><button data-action="share-room" class="secondary wide">SHARE ROOM</button><div id="player-list" class="player-list"></div>
+        <section id="lobby-chat" class="chat-panel chat-inline" aria-label="Room chat"><strong>ROOM CHAT</strong><div id="lobby-chat-log" class="chat-log" aria-live="polite"></div><form id="lobby-chat-form" class="chat-form"><input id="lobby-chat-input" type="text" maxlength="160" autocomplete="off" placeholder="Message the room…" aria-label="Chat message"><button type="submit" class="blue">SEND</button></form></section>
         <div id="host-options" class="hidden"><p class="eyebrow">MATCH RULES</p><div class="segmented"><button data-rules="NORMAL">NORMAL</button><button id="lobby-deadlock" data-rules="DEADLOCK">DEADLOCK</button><button id="lobby-chaos" data-rules="CHAOS" class="hidden">CHAOS</button></div><button data-action="start-room" class="primary wide">START MATCH</button></div>
         <p class="hint">Host: hold DEADLOCK to reveal CHAOS.</p>
       </div>
@@ -94,6 +96,8 @@
       </div>
       <div id="notice" class="notice hidden"></div><button id="freeze-button" data-control="freeze" class="freeze hidden">❄ FREEZE AI</button>
       <div id="keyboard-guide" class="keyboard-guide"></div>
+      <button id="game-chat-toggle" data-action="toggle-chat" class="chat-toggle hidden">CHAT <kbd>/</kbd> <span id="chat-unread" class="hidden">0</span></button>
+      <section id="game-chat-panel" class="chat-panel chat-game hidden" aria-label="Match chat"><div class="chat-heading"><strong>MATCH CHAT</strong><button type="button" data-action="toggle-chat" aria-label="Close chat">×</button></div><div id="game-chat-log" class="chat-log" aria-live="polite"></div><form id="game-chat-form" class="chat-form"><input id="game-chat-input" type="text" maxlength="160" autocomplete="off" placeholder="Message the room…" aria-label="Chat message"><button type="submit" class="blue">SEND</button></form></section>
       <div id="touch-controls" class="touch-controls">
         <button data-control="left">←</button><button data-control="right">→</button><button data-control="down">↓</button><button data-control="drop">↑<small>DROP</small></button><button data-control="rotate">↻</button><button data-control="hold">HOLD</button>
       </div>
@@ -102,6 +106,6 @@
     </section>
   </main>
   <div id="modal" class="modal hidden"><div class="card"><h3 id="modal-title"></h3><p id="modal-message"></p><div id="modal-actions"></div></div></div>
-  <script src="engine.js?v=1.12.4"></script><script src="app.js?v=1.12.4"></script>
+  <script src="engine.js?v=1.12.10"></script><script src="app.js?v=1.12.10"></script>
 </body>
 </html>

@@ -59,15 +59,24 @@ function publicPlayers(room) {
 function lobby(room) {
   broadcast(room, "lobby", { code: room.code, hostId: room.hostId, rules: room.rules, players: publicPlayers(room) });
 }
+function postChat(room, message) {
+  room.messages.push(message);
+  if (room.messages.length > 50) room.messages.shift();
+  broadcast(room, "chat", { message });
+}
 function removeClient(ws) {
   const room = rooms.get(ws.roomCode);
   if (!room) return;
+  const player = room.players.get(ws.playerId);
   room.players.delete(ws.playerId);
   room.pending.delete(ws.playerId);
   if (!room.players.size || ws.playerId === room.hostId) {
     broadcast(room, "room_closed", { reason: "The host left the room." });
     rooms.delete(room.code);
-  } else lobby(room);
+  } else {
+    if (player) postChat(room, { system: true, text: `${player.name} left the room.`, sentAt: Date.now() });
+    lobby(room);
+  }
 }
 
 const wss = new WebSocketServer({ server, path: "/multiplayer" });
@@ -82,7 +91,7 @@ wss.on("connection", ws => {
     if (msg.type === "create") {
       const code = makeCode();
       const player = { id: ws.id, name: cleanName(msg.name), ready: true, ws };
-      const room = { code, hostId: ws.id, rules: "NORMAL", players: new Map([[ws.id, player]]), pending: new Map(), started: false };
+      const room = { code, hostId: ws.id, rules: "NORMAL", players: new Map([[ws.id, player]]), pending: new Map(), messages: [], started: false };
       rooms.set(code, room); ws.roomCode = code; ws.playerId = ws.id;
       send(ws, "created", { id: ws.id, code }); lobby(room); return;
     }
@@ -105,7 +114,11 @@ wss.on("connection", ws => {
       if (!pending) return;
       room.pending.delete(msg.id);
       if (msg.accept && room.players.size < 4) {
-        room.players.set(pending.id, pending); send(pending.ws, "joined", { id: pending.id, code: room.code }); lobby(room);
+        room.players.set(pending.id, pending);
+        send(pending.ws, "joined", { id: pending.id, code: room.code });
+        send(pending.ws, "chat_history", { messages: room.messages });
+        postChat(room, { system: true, text: `${pending.name} joined the room.`, sentAt: Date.now() });
+        lobby(room);
       } else send(pending.ws, "join_denied", { reason: "The host declined your request." });
       return;
     }
@@ -117,6 +130,16 @@ wss.on("connection", ws => {
     }
     if (msg.type === "state") broadcast(room, "state", { id: ws.playerId, name: cleanName(msg.name), state: msg.state }, ws);
     if (msg.type === "garbage") broadcast(room, "garbage", { from: ws.playerId, lines: Math.max(0, Math.min(4, Number(msg.lines) || 0)) }, ws);
+    if (msg.type === "chat") {
+      const now = Date.now();
+      if (now - (ws.lastChatAt || 0) < 500) return;
+      const text = cleanChat(msg.text);
+      if (!text) return;
+      ws.lastChatAt = now;
+      const player = room.players.get(ws.playerId);
+      postChat(room, { id: ws.playerId, name: player.name, text, sentAt: now });
+      return;
+    }
     if (msg.type === "rematch" && isHost) {
       room.started = true; broadcast(room, "start", { rules: room.rules, seed: Math.floor(Math.random() * 2147483647) });
     }
@@ -127,6 +150,9 @@ wss.on("connection", ws => {
 
 function cleanName(value) {
   return String(value || "PLAYER").replace(/[^\p{L}\p{N}_ -]/gu, "").trim().slice(0, 16) || "PLAYER";
+}
+function cleanChat(value) {
+  return String(value || "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 160);
 }
 
 server.listen(PORT, "0.0.0.0", () => {

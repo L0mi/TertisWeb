@@ -2,6 +2,8 @@
 
 Cross-platform browser edition of Tertis for iPhone, iPad, Android, Windows, and macOS. It includes touch play, configurable PC controls, Single Player, VS AI, Deadlock/Chaos rules, and 2–4 player rooms with exact-version checks.
 
+The iOS and Android standalone projects are available at [https://github.com/L0mi/Tertis.git](https://github.com/L0mi/Tertis.git). The web app also links to this repository from its main menu.
+
 ## Run locally
 
 1. Install Node.js 18 or newer.
@@ -27,6 +29,7 @@ Static-only hosting is enough for Single Player and VS AI, but multiplayer needs
 - `Shift`: Hold/swap
 - `Space`: Hard drop
 - `Esc`: Pause
+- `/`: Open multiplayer match chat; press Enter to send and Escape to close
 
 Every key can be changed under Options. The on-screen control legend updates immediately.
 
@@ -40,6 +43,8 @@ On phones, the native-style D-pad places hard drop on the upper arrow, with left
 - Hold the lobby Deadlock button for 1.2 seconds to reveal Chaos
 - Exact Version 1.12 / protocol 3 check
 - Live compact opponent boards and garbage lines
+- Room chat in the lobby and during matches, with unread-message badges and recent chat history for newly approved players
+- `/` opens and focuses chat during a multiplayer match
 
 The current native iOS and Android apps use Bonjour/NSD and cannot enter web rooms until their multiplayer transports are changed to this WebSocket protocol.
 
